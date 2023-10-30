@@ -3,10 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:wpf_game_of_life"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="gameGrid">
-
-    </Grid>
+        Title="184657 Panfil Wojciech Gra w Życie Projekt 1 PLA.NET" Height="480" Width="640" Background="AntiqueWhite">
+    <DockPanel Height="Auto">
+        <TextBlock DockPanel.Dock="Top">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="Board Size: {0}x{0} | Generation: {1} | Deaths: {2} | Births: {3}">
+                    <Binding Path="cellGridSize" />
+                    <Binding Path="GenerationNumber" />
+                    <Binding Path="CellDeathsNumber" />
+                    <Binding Path="CellBirthsNumber" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
+            <Button DockPanel.Dock="Top" Command="{Binding DeEvolveCommand}">Deevolve</Button>
+            <Button DockPanel.Dock="Top" Command="{Binding EvolveCommand}">Evolve</Button>
+            <Button DockPanel.Dock="Top" Command="{Binding AutoEvolveCommand}">Enable/Disable Auto evolve</Button>
+            <Button DockPanel.Dock="Top" Command="{Binding LoadStateCommand}">Load state</Button>
+            <Button DockPanel.Dock="Top" Command="{Binding SaveStateCommand}">Save state</Button>
+            <Button DockPanel.Dock="Top" Command="{Binding ResetCommand}">Reset</Button>
+        </StackPanel>
+        <Grid DockPanel.Dock="Bottom" Name="gameGrid"/>
+    </DockPanel>
 </Window>
