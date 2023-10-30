@@ -10,13 +10,14 @@ namespace wpf_game_of_life
 {
     public partial class MainWindow : Window
     {
-        private int gridSize = 40;
+        private int gridSize = 0;
         private bool[,] grid;
         private bool[,] newGrid;
         private DispatcherTimer timer;
 
-        public MainWindow()
+        public MainWindow(int gridSize)
         {
+            this.gridSize = gridSize;
             InitializeComponent();
             grid = new bool[gridSize, gridSize];
             newGrid = new bool[gridSize, gridSize];
