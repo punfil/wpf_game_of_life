@@ -94,12 +94,22 @@ namespace wpf_game_of_life.Game
 
         public void LoadState()
         {
-            
         }
 
         public void SaveState()
         {
+            string? filename = null;
 
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "game_of_life_state";
+            dlg.DefaultExt = ".txt";
+            dlg.Filter = "Text documents (.txt)|*.txt";
+            Nullable<bool> result = dlg.ShowDialog();
+            if (result == true)
+            {
+                filename = dlg.FileName;
+                System.IO.File.WriteAllText(filename, this.currentGeneration.ToString());
+            }
         }
 
         public EvolveReturn Reset()
