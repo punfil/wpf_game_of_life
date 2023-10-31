@@ -19,12 +19,23 @@ namespace wpf_game_of_life.Game
         public int cellBirthNumber;
     }
 
+    public class AutoEvolveReturn : EventArgs
+    {
+        public EvolveReturn evolveReturn { get; set; }
+
+        public AutoEvolveReturn(EvolveReturn evolveReturn)
+        {
+            this.evolveReturn = evolveReturn;
+        }
+    }
+
     public class GOLGame
     {
         private Generation currentGeneration {  get; set; }
         private IList<Generation> generationList { get; set; }
 
         private DispatcherTimer timer;
+        public event EventHandler RequestTickData;
 
         public GOLGame(Generation generation)
         {
@@ -38,6 +49,15 @@ namespace wpf_game_of_life.Game
         private void AutoEvolve(object sender, EventArgs e)
         {
             this.Evolve();
+        }
+
+        private void OnRequestTickData(int generationNumber, int births, int deaths)
+        {
+            var val = new EvolveReturn();
+            val.generationNumber = generationNumber;
+            val.cellBirthNumber = births;
+            val.cellDeathNumber = deaths;
+            RequestTickData?.Invoke(this, new AutoEvolveReturn(val));
         }
 
         public EvolveReturn Evolve()
@@ -54,6 +74,11 @@ namespace wpf_game_of_life.Game
 
             var evolveChangeList = currentGeneration.GetEvolveChangeList();
             currentGeneration.ApplyEvolveChangeList(evolveChangeList);
+
+            if (this.timer.IsEnabled)
+            {
+                OnRequestTickData(this.currentGeneration.generationNumber, this.currentGeneration.GetCellStats().births, this.currentGeneration.GetCellStats().deaths);
+            }
 
             return new EvolveReturn
             {

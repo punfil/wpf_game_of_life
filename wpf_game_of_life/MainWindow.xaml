@@ -66,6 +66,6 @@
             <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding SaveStateCommand}"> Save state </Button>
             <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding ResetCommand}"> Reset </Button>
         </StackPanel>
-        <Grid DockPanel.Dock="Bottom" Name="gameGrid"/>
+        <Grid DockPanel.Dock="Bottom" Name="gameGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </DockPanel>
 </Window>

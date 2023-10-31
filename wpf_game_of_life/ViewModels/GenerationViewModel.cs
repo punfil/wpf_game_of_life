@@ -77,6 +77,17 @@ namespace wpf_game_of_life.ViewModels
 
         public void Setup()
         {
+
+            golgame.RequestTickData += (sender, args) =>
+            {
+                if (args is AutoEvolveReturn autoEvolveReturn)
+                {
+                    GenerationNumber = autoEvolveReturn.evolveReturn.generationNumber;
+                    CellBirthsNumber = autoEvolveReturn.evolveReturn.cellBirthNumber;
+                    CellDeathsNumber = autoEvolveReturn.evolveReturn.cellDeathNumber;
+                }
+            };
+
             EvolveCommand = new Command<object>(
                 _ => EvolveGeneration(),
                 _ => ReturnTrue()
