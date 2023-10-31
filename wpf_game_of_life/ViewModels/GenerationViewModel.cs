@@ -158,24 +158,10 @@ namespace wpf_game_of_life.ViewModels
 
         private void LoadState()
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FilterIndex = 2;
-            dlg.RestoreDirectory = true;
-
-            Nullable<bool> result = dlg.ShowDialog();
-
-            string? filecontent = null;
-
-            if (result == true)
+            var gameState = golgame.LoadState();
+            if (gameState != null)
             {
-                string filePath = dlg.FileName;
-                var fileStream = dlg.OpenFile();
-                using (StreamReader reader  = new StreamReader(fileStream))
-                {
-                    filecontent = reader.ReadToEnd();
-                }
-
-                var newGame = new MainWindow(filecontent);
+                var newGame = new MainWindow(gameState);
                 OnRequestClose();
                 newGame.Show();
             }

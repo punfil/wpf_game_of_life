@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,6 +116,28 @@ namespace wpf_game_of_life.Game
             {
                 timer.Start();
             }
+        }
+
+        public string? LoadState()
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FilterIndex = 2;
+            dlg.RestoreDirectory = true;
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            string? filecontent = null;
+
+            if (result == true)
+            {
+                string filePath = dlg.FileName;
+                var fileStream = dlg.OpenFile();
+                using (StreamReader reader = new StreamReader(fileStream))
+                {
+                    filecontent = reader.ReadToEnd();
+                }
+            }
+            return filecontent;
         }
 
         public void SaveState()
