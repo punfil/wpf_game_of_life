@@ -5,6 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="184657 Panfil Wojciech Gra w Życie Projekt 1 PLA.NET" Height="480" Width="640" Background="AntiqueWhite">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontStyle" Value="Oblique"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+                <Trigger Property="IsMouseDirectlyOver" Value="True">
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+                <EventTrigger RoutedEvent="Button.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Opacity"
+                                From="1"
+                                To="0"
+                                Duration="0:0:0.500" />
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Opacity"
+                                From="0"
+                                To="1"
+                                Duration="0:0:0.500"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <DockPanel Height="Auto">
         <TextBlock DockPanel.Dock="Top">
             <TextBlock.Text>
@@ -17,12 +59,12 @@
             </TextBlock.Text>
         </TextBlock>
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
-            <Button DockPanel.Dock="Top" Command="{Binding DeEvolveCommand}">Deevolve</Button>
-            <Button DockPanel.Dock="Top" Command="{Binding EvolveCommand}">Evolve</Button>
-            <Button DockPanel.Dock="Top" Command="{Binding AutoEvolveCommand}">Enable/Disable Auto evolve</Button>
-            <Button DockPanel.Dock="Top" Command="{Binding LoadStateCommand}">Load state</Button>
-            <Button DockPanel.Dock="Top" Command="{Binding SaveStateCommand}">Save state</Button>
-            <Button DockPanel.Dock="Top" Command="{Binding ResetCommand}">Reset</Button>
+            <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding DeEvolveCommand}"> Deevolve </Button>
+            <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding EvolveCommand}"> Evolve </Button>
+            <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding AutoEvolveCommand}"> Enable/Disable Auto evolve </Button>
+            <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding LoadStateCommand}"> Load state </Button>
+            <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding SaveStateCommand}"> Save state </Button>
+            <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Command="{Binding ResetCommand}"> Reset </Button>
         </StackPanel>
         <Grid DockPanel.Dock="Bottom" Name="gameGrid"/>
     </DockPanel>
