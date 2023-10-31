@@ -92,10 +92,6 @@ namespace wpf_game_of_life.Game
             }
         }
 
-        public void LoadState()
-        {
-        }
-
         public void SaveState()
         {
             string? filename = null;

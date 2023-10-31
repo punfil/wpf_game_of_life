@@ -15,13 +15,29 @@ namespace wpf_game_of_life
 {
     public partial class MainWindow : Window
     {
-       private GenerationViewModel generationViewModel;
+        private GenerationViewModel generationViewModel;
 
         public MainWindow(int cellgridSize)
         {
             InitializeComponent();
 
             generationViewModel = new GenerationViewModel(cellgridSize);
+
+            DrawUI(generationViewModel);
+
+            DataContext = generationViewModel;
+
+            generationViewModel.RequestClose += (sender, args) =>
+            {
+                this.Close();
+            };
+        }
+
+        public MainWindow(string serializedState)
+        {
+            InitializeComponent();
+
+            generationViewModel = new GenerationViewModel(serializedState);
 
             DrawUI(generationViewModel);
 

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using wpf_game_of_life.Game;
 using wpf_game_of_life.Models;
 
@@ -13,6 +16,7 @@ namespace wpf_game_of_life.ViewModels
     public class GenerationViewModel : NotifyPropertyChanged
     {
         private readonly GOLGame golgame;
+        public event EventHandler RequestClose;
 
         public int cellGridSize { get { return golgame.GetCellGridSize(); } }
 
@@ -25,6 +29,11 @@ namespace wpf_game_of_life.ViewModels
                 generationNumber = value;
                 OnPropertyChanged();
             }
+        }
+
+        private void OnRequestClose()
+        {
+            RequestClose?.Invoke(this, EventArgs.Empty);
         }
 
         public int CellDeathsNumber
@@ -45,8 +54,6 @@ namespace wpf_game_of_life.ViewModels
             }
         }
 
-
-
         public Command<object> EvolveCommand { get; private set; }
         public Command<object> DeEvolveCommand { get; private set; }
         public Command<object> AutoEvolveCommand { get; private set; }
@@ -59,7 +66,17 @@ namespace wpf_game_of_life.ViewModels
         public GenerationViewModel(int cellGridSize)
         {
             golgame = new GOLGame(new Generation(cellGridSize));
+            Setup();
+        }
 
+        public GenerationViewModel(string serializedState)
+        {
+            golgame = new GOLGame(new Generation(serializedState));
+            Setup();
+        }
+
+        public void Setup()
+        {
             EvolveCommand = new Command<object>(
                 _ => EvolveGeneration(),
                 _ => ReturnTrue()
@@ -103,6 +120,8 @@ namespace wpf_game_of_life.ViewModels
             return golgame.GetCell(row, column);
         }
 
+
+
         private void EvolveGeneration()
         {
             EvolveReturn evolveReturn = golgame.Evolve();
@@ -128,7 +147,27 @@ namespace wpf_game_of_life.ViewModels
 
         private void LoadState()
         {
-            golgame.LoadState();
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FilterIndex = 2;
+            dlg.RestoreDirectory = true;
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            string? filecontent = null;
+
+            if (result == true)
+            {
+                string filePath = dlg.FileName;
+                var fileStream = dlg.OpenFile();
+                using (StreamReader reader  = new StreamReader(fileStream))
+                {
+                    filecontent = reader.ReadToEnd();
+                }
+
+                var newGame = new MainWindow(filecontent);
+                OnRequestClose();
+                newGame.Show();
+            }
         }
 
         private void SaveState()

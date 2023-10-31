@@ -33,7 +33,8 @@ namespace wpf_game_of_life.Models
 
         public override string ToString()
         {
-            return $"{row}|{col}|{isAlive}";
+            var val = isAlive ? 1 : 0;
+            return $"{row}|{col}|{val}";
         }
 
         public object Clone()

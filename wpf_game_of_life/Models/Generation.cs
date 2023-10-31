@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -39,6 +40,25 @@ namespace wpf_game_of_life.Models
             this.generationNumber = 0;
             this.cellStats.births = 0;
             this.cellStats.deaths = 0;
+        }
+
+        public Generation(string serializedState)
+        {
+            string[] lines = serializedState.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            var data = lines[0].Split("#");
+            this.cellGridSize = Int32.Parse(data[0]);
+            this.generationNumber = Int32.Parse(data[1]);
+            this.cellStats.deaths = Int32.Parse(data[2]);
+            this.cellStats.births = Int32.Parse(data[3]);
+
+            this.cellGrid = new Cell[cellGridSize, cellGridSize];
+
+            for (int i = 1; i < lines.Length; i++)
+            {
+                data = lines[i].Split("|");
+                this.cellGrid[Int32.Parse(data[0]), Int32.Parse(data[1])] = new Cell(Int32.Parse(data[0]), Int32.Parse(data[1]), Int32.Parse(data[2]) == 1 ? true : false);
+            }
         }
 
         public Generation(int cellGridSize, Cell[,] cellGrid, int generationNumber, int cellDeathsNumber, int cellBirthsNumber)
@@ -88,13 +108,18 @@ namespace wpf_game_of_life.Models
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"#{this.cellGridSize}");
+            stringBuilder.AppendLine($"{this.cellGridSize}#{this.generationNumber}#{this.cellStats.deaths}#{this.cellStats.births}");
             foreach (Cell cell in this.cellGrid)
             {
                 stringBuilder.AppendLine(cell.ToString());
             }
 
             return stringBuilder.ToString();
+        }
+
+        public void fromString(string stringFromToString)
+        {
+
         }
 
         private int CountCellNeighbors(int row, int col)
